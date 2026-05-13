@@ -3,6 +3,8 @@
 ## Install dependencies
 
 ```bash
+npm install -g pnpm@latest-11
+pnpm approve-builds
 pnpm install
 ```
 
@@ -33,10 +35,10 @@ https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-sear
 
 ## Publish new release
 
-- Make sure test are running: `npm run test`
+- Make sure test are running: `pnpm run test`
 - Define the new version to use x.y.z
-- Run: `npm run version x.y.z`
+- Run: `pnpm run version x.y.z`
 - Commit and push the file modified
 - Tag the commit: `git tag x.y.z`
 - Push the tag: `git push --tags`
-- Publish to NPM: `npm publish`
+- Publish to NPM: `pnpm publish`

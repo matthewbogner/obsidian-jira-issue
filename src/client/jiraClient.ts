@@ -1,6 +1,6 @@
 import { Platform, requestUrl, RequestUrlParam, RequestUrlResponse } from 'obsidian'
 import { AVATAR_RESOLUTION, EAuthenticationTypes, IJiraIssueAccountSettings } from '../interfaces/settingsInterfaces'
-import { ESprintState, IJiraAutocompleteField, IJiraBoard, IJiraDevStatus, IJiraField, IJiraIssue, IJiraSearchResults, IJiraSprint, IJiraStatus, IJiraUser } from '../interfaces/issueInterfaces'
+import { ESprintState, IJiraAutocompleteField, IJiraBoard, IJiraDevStatus, IJiraField, IJiraIssue, IJiraSearchResults, IJiraServerInfo, IJiraSprint, IJiraStatus, IJiraUser } from '../interfaces/issueInterfaces'
 import { SettingsData } from "../settings"
 
 interface RequestOptions {
@@ -85,12 +85,20 @@ function buildHeaders(account: IJiraIssueAccountSettings): Record<string, string
     return requestHeaders
 }
 
+function getContentType(response: RequestUrlResponse): string | undefined {
+    if (!response.headers) return undefined
+    const key = Object.keys(response.headers).find(k => k.toLowerCase() === 'content-type')
+    return key ? response.headers[key] : undefined
+}
+
 function isJsonResponse(response: RequestUrlResponse): boolean {
-    return response.headers && response.headers['content-type'] && response.headers['content-type'].includes('json') && response.json !== undefined
+    const contentType = getContentType(response)
+    return contentType !== undefined && contentType.includes('json') && response.json !== undefined
 }
 
 function isTextResponse(response: RequestUrlResponse): boolean {
-    return response.headers && response.headers['content-type'] && response.headers['content-type'].includes('text') && response.text !== undefined
+    const contentType = getContentType(response)
+    return contentType !== undefined && contentType.includes('text') && response.text !== undefined
 }
 
 async function sendRequest(requestOptions: RequestOptions): Promise<any> {
@@ -264,6 +272,28 @@ export default {
             await fetchIssueImages(issue)
         }
         return searchResults
+    },
+
+    async updateDisplayUrlCache(): Promise<void> {
+        for (const account of SettingsData.accounts) {
+            console.log('Updating display URL cache for account:', account.alias)
+            if (account.cache.displayUrl) {
+                continue
+            }
+            try {
+                const response = await sendRequest(
+                    {
+                        method: 'GET',
+                        path: `/serverInfo`,
+                        account: account,
+                    }
+                ) as IJiraServerInfo
+                account.cache.displayUrl = response.displayUrl
+                console.log('Display URL cache updated for account:', account.alias, account.cache.displayUrl)
+            } catch (e) {
+                console.error('Error while updating display URL cache for account:', account.alias, e)
+            }
+        }
     },
 
     async updateStatusColorCache(status: string, account: IJiraIssueAccountSettings): Promise<void> {

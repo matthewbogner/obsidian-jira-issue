@@ -31,6 +31,7 @@ export default class JiraIssuePlugin extends Plugin {
         await this._settingTab.loadSettings()
         this.addSettingTab(this._settingTab)
         JiraClient.updateCustomFieldsCache()
+        JiraClient.updateDisplayUrlCache()
         // Load icons
         setupIcons()
         // Fence rendering

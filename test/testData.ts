@@ -10,6 +10,7 @@ const kEmptyAccountCache = {
         functions: {},
     },
     statusColor: {},
+    displayUrl: '',
 }
 
 export const TestAccountOpen = {

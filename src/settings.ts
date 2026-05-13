@@ -48,6 +48,7 @@ export const DEFAULT_ACCOUNT: IJiraIssueAccountSettings = {
     color: '#000000',
     use2025Api: false,
     cache: {
+        displayUrl: '',
         statusColor: {},
         customFieldsIdToName: {},
         customFieldsNameToId: {},

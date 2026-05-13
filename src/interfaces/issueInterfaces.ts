@@ -106,6 +106,13 @@ export interface IJiraUser {
     }
 }
 
+export interface IJiraServerInfo {
+    displayUrl: string
+    serverTimezone: string
+    version: string
+    deploymentType: string
+}
+
 export interface IJiraSearchResults {
     issues: IJiraIssue[]
     maxResults?: number

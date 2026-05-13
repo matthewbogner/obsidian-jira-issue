@@ -58,6 +58,7 @@ export interface IJiraIssueAccountSettings {
     color: string
     use2025Api: boolean
     cache: {
+        displayUrl: string
         statusColor: Record<string, string>
         customFieldsIdToName: Record<string, string>
         customFieldsNameToId: Record<string, string>
