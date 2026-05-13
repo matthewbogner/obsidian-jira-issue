@@ -77,6 +77,7 @@ describe('Settings', () => {
                     "customFieldsIdToName": {},
                     "customFieldsNameToId": {},
                     "customFieldsType": {},
+                    "displayUrl": '',
                     "jqlAutocomplete": {
                         "fields": [],
                         "functions": {},
